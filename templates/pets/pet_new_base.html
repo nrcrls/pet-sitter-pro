@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}Add a new pet{% endblock title %}
+
+{% block extra_breadcrumbs %}
+    <li>
+        <a href="{% url 'home' %}" class="breadcrumb">
+            <i class="fa-solid fa-house mr-2"></i>Home
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'pet_list' %}" class="breadcrumb">
+            <i class="fa-solid fa-paw mr-2 text-lg"></i>Pets
+        </a>
+    </li>
+    <li><i class="fa-solid fa-plus mr-2"></i>Add Pets</li>
+{% endblock %}
+
+{% block content %}
+    <div class="md:hidden flex w-1/2 m-auto mt-10 flex-col">
+        <div class="card bg-primary text-primary-content rounded-box flex-grow flex flex-col items-center justify-center">
+            <a href="{% url 'pet_create' %}">
+                <div class="mt-14 mb-4">
+                    <img src="{% static 'images/new_pets.svg' %}" alt="Add New Pet" class="w-24" />
+                </div>
+                <p class="mb-14 text-center">Add New Client<br></p>
+            </a>
+        </div>
+        <div class="divider">OR</div>
+        <div class="card bg-primary text-primary-content rounded-box flex-grow flex flex-col items-center justify-center">
+            <a href="{% url 'pet_create_existing' %}">
+                <div class="mt-12 mb-1">
+                    <img src="{% static 'images/existing_pets.svg' %}" alt="Add Pet to Existing Household" class="w-36" />
+                </div>
+                <p class="mb-12 text-center">Add New Pet<br>to Existing Client</p>
+            </a>
+        </div>
+    </div>
+    <div class="hidden md:flex w-1/2 m-auto mt-32">
+        <div class="card bg-primary text-primary-content rounded-box flex-grow flex flex-col items-center justify-center">
+            <a href="{% url 'pet_create' %}">
+                <div class="mt-16 px-10 mb-4">
+                    <img src="{% static 'images/new_pets.svg' %}" alt="Add New Pet" class="w-16 md:w-24" />
+                </div>
+                <p class="mb-16 text-center">Add New Client</p>
+            </a>
+        </div>
+        <div class="divider divider-horizontal">OR</div>
+        <div class="card bg-primary text-primary-content rounded-box flex-grow flex flex-col items-center justify-center">
+            <a href="{% url 'pet_create_existing' %}">
+                <div class="mt-16 mb-1">
+                    <img src="{% static 'images/existing_pets.svg' %}" alt="Add Pet to Existing Household" class="w-36" />
+                </div>
+                <p class="mb-16 text-center">Add New Pet<br>to Existing Client</p>
+            </a>
+        </div>
+    </div>
+{% endblock content %}

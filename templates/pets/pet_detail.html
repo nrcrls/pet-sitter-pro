@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ pet.name }}{% endblock title %}
+
+{% block extra_breadcrumbs %}
+    <li>
+        <a href="{% url 'home' %}" class="breadcrumb">
+            <i class="fa-solid fa-house mr-2"></i>Home
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'pet_list' %}" class="breadcrumb">
+            <i class="fa-solid fa-paw mr-2 text-lg"></i>Pets
+        </a>
+    </li>
+    <li><i class="fa-solid fa-cat mr-2"></i>{{ pet.name }}</li>
+{% endblock %}
+
+{% block content %}
+    <div class="detail-container flex flex-col md:flex-row gap-4 mt-8">
+        <div class="card-container md:w-1/3">
+            <div class="card-body">
+                <div class="flex flex-col items-center mt-4 gap-2">
+                    <div class="avatar">
+                        <div class="w-32 rounded-full">
+                            <img src="{% if pet.profile_image %}{{ pet.profile_image.url }}{% else %}{% static '/images/avatar.png' %}{% endif %}" alt="{{ pet }}" />
+                        </div>
+                    </div>
+                    <h1 class="text-3xl font-semibold">{{ pet }}</h1>
+                    <h3 class="text-neutral-content">{{ pet.get_pet_type_display }}, Golden Retriever</h3>
+                    <!-- <h3 class="text-neutral-content">11 years old</h3> -->
+                </div>
+                <div class="mt-4 flex justify-center gap-2">
+                    <a href="{{ pet.get_edit_url }}" class="btn btn-secondary text-right">
+                        <i class="fa-regular fa-pen-to-square fa-lg"></i>
+                        Edit Pet
+                    </a>
+                    <button class="btn btn-error" onclick="showDeleteModal('{{ pet.get_destroy_url }}')"><i class="fa-solid fa-trash"></i>Delete</button>
+
+                    <dialog id="delete_modal" class="modal">
+                    <div class="modal-box">
+                        <h3 class="text-lg font-bold">Are you sure you want to delete this pet?</h3>
+                        <p class="py-4">This action cannot be undone.</p>
+                        <div class="modal-action">
+                        <form id="delete_form" method="post" action="">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-error">Yes, delete</button>
+                        </form>
+                        <button class="btn" onclick="closeDeleteModal()">Cancel</button>
+                        </div>
+                    </div>
+                    </dialog>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="flex-1 space-y-4">
+            <div class="collapse collapse-arrow accordion">
+                <input type="checkbox" class="peer" />
+                <div class="collapse-title accordion-title">Owner Information</div>
+                <div class="collapse-content accordion-main">
+                    <div>
+                        <p><span class="text-neutral-content">Owner:</span></p>
+                        <p>{{ pet.owner }}</p>
+                        <p class="mt-2"><span class="text-neutral-content">Contact:</span></p>
+                        <p>{{ owner_contact_method }}</p>
+                    </div>
+                    <div>
+                        <p><span class="text-neutral-content">Address:</span></p>
+                        <p>{{ address }}</p>
+                        <p class="mt-2"><span class="text-neutral-content">Household:</span></p>
+                        <p>{{ pet.owner.household.name }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse collapse-arrow accordion">
+                <input type="checkbox" class="peer" />
+                <div class="collapse-title accordion-title">Care Instructions</div>
+                <div class="collapse-content accordion-main">
+                    <div>
+                        <p><span class="text-neutral-content">Medication:</span></p>
+                        {{ pet.medication_status }}
+                    </div>
+                    {% if pet.medication_required %}
+                        <div>
+                            <p><span class="text-neutral-content">Medication Instructions:</span></p>
+                            {{ pet.medication_instructions|linebreaksbr }}
+                        </div>
+                    {% endif %}
+                    <div>
+                        <p><span class="text-neutral-content">Reference guide:</span></p>
+                        <p>{{ pet.instruction_manual }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse collapse-arrow accordion">
+                <input type="checkbox" class="peer" />
+                <div class="collapse-title accordion-title">Upcoming Pet Sitting Requests</div>
+                <div class="collapse-content accordion-main">
+                    <div class="mt-2">
+                        <ul>
+                            {% for booking in bookings %}
+                                <li class="mb-4">
+                                    <a href="{{ booking.get_absolute_url }}" class="hover:text-base-300 hover:underline">{{ booking.start_date }} to {{ booking.end_date }}</a>                                
+                                </li>
+                            {% empty %}
+                                <li>No bookings found. Schedule one <a href="{% url 'booking_new' %}" class="underline text-base-300 underline-offset-2">here</a>.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

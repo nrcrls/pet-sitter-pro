@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}Create new booking{% endblock title %}
+
+{% block extra_breadcrumbs %}
+    <li>
+        <a href="{% url 'home' %}" class="breadcrumb">
+            <i class="fa-solid fa-house mr-2"></i>Home
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'pet_list' %}" class="breadcrumb">
+            <i class="fa-solid fa-paw mr-2 text-lg"></i>Pets
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'pet_new_base' %}" class="breadcrumb">
+            <i class="fa-solid fa-plus mr-2"></i>Add Pets
+        </a>
+    </li>
+    <li><i class="fa-solid fa-plus mr-2"></i>Add New Client</li>
+{% endblock %}
+
+{% block content %}
+    <div class="form-container">
+        <div class="new-form-main">
+            <h2 class="new-from-title">Add New Client</h2>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {{ wizard.management_form }}
+                
+                <!-- Pet infomation -->
+                <div class="mb-4">
+                    {{ wizard.form.name.label_tag }}
+                    {{ wizard.form.name|add_class:"wizard-form-input" }}
+                    {% if wizard.form.name.errors %}
+                        <div class="text-error text-sm">{{ wizard.form.name.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ wizard.form.pet_type.label_tag }}
+                    {{ wizard.form.pet_type|add_class:"wizard-form-input" }}
+                    {% if wizard.form.pet_type.errors %}
+                        <div class="text-error text-sm">{{ wizard.form.pet_type.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ wizard.form.medication_required.label_tag }}
+                    {{ wizard.form.medication_required|add_class:"checkbox create-input" }}
+                    {% if wizard.form.medication_required.errors %}
+                        <div class="text-error text-sm">{{ wizard.form.medication_required.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ wizard.form.profile_image.label_tag }}
+                    {{ wizard.form.profile_image|add_class:"create-input" }}
+                    {% if wizard.form.profile_image.errors %}
+                        <div class="text-error text-sm">{{ wizard.form.profile_image.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Owner infomation -->
+                <div class="mb-4">
+                    {{ wizard.form.method_of_contact.label_tag }}
+                    {{ wizard.form.method_of_contact|add_class:"wizard-form-input" }}
+                    {% if wizard.form.method_of_contact.errors %}
+                        <div class="text-error text-sm">{{ wizard.form.method_of_contact.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ wizard.form.postcode.label_tag }}
+                    {{ wizard.form.postcode|add_class:"wizard-form-input" }}
+                    {% if wizard.form.postcode.errors %}
+                        <div class="text-error text-sm">{{ wizard.form.postcode.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-4">
+                    {{ wizard.form.prefecture.label_tag }}
+                    {{ wizard.form.prefecture|add_class:"wizard-form-input" }}
+                    {% if wizard.form.prefecture.errors %}
+                        <div class="text-error text-sm">{{ wizard.form.prefecture.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ wizard.form.city.label_tag }}
+                    {{ wizard.form.city|add_class:"wizard-form-input" }}
+                    {% if wizard.form.city.errors %}
+                        <div class="text-error text-sm">{{ wizard.form.city.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ wizard.form.town.label_tag }}
+                    {{ wizard.form.town|add_class:"wizard-form-input" }}
+                    {% if wizard.form.town.errors %}
+                        <div class="text-error text-sm">{{ wizard.form.town.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-4">
+                    {{ wizard.form.street.label_tag }}
+                    {{ wizard.form.street|add_class:"wizard-form-input" }}
+                    {% if wizard.form.street.errors %}
+                        <div class="text-error text-sm">{{ wizard.form.street.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="pt-4">
+                    {% if wizard.steps.prev %}
+                        <button class="btn btn-secondary m-1" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Back</button>
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary m-1">
+                        {% if wizard.steps.next %}Next{% else %}Submit{% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

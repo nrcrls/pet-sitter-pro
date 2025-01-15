@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}Edit Booking{% endblock title %}
+
+{% block extra_breadcrumbs %}
+    <li>
+        <a href="{% url 'home' %}" class="breadcrumb">
+            <i class="home-breadcrumb"></i>Home
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'booking_list' %}" class="breadcrumb">
+            <i class="fa-solid fa-calendar-days mr-2"></i>Bookings
+        </a>
+    </li>
+    <li>
+        <a href="{{ booking.get_absolute_url }}" class="breadcrumb">
+            <i class="fa-solid fa-dog mr-2"></i>{{ booking }}
+        </a>
+    </li>
+    <li><i class="fa-solid fa-pen mr-2"></i>Edit Booking Information</li>
+{% endblock %}
+
+{% block content %}
+    <div class="form-container">
+        <div class="new-form-main">
+            <h2 class="new-from-title">Edit Booking</h2>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                    <div class="flex flex-col space-y-2">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-error">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-error">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="mb-4">
+                        <label class="label" for="{{ field.label }}">{{ field.label }}</label>
+            
+                        {% if field.name == 'rate_per_day' or field.name == 'bonus_rate' %}
+                            {% render_field field class="form-input" type="text" placeholder="Enter Rate" %}
+                        {% elif field.name in 'start_date end_date' %}
+                            {% render_field field class="form-input" type="date" %}
+                        {% else %}
+                            {% render_field field class="form-input" %}
+                        {% endif %}
+            
+                        {% if field.errors %}
+                            <div class="text-error">
+                                <strong>{{ field.errors.0 }}</strong>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="pt-4">
+                    <button type="submit" class="btn btn-primary">Save Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}Update Pet Info{% endblock title %}
+
+{% block extra_breadcrumbs %}
+    <li>
+        <a href="{% url 'home' %}" class="breadcrumb">
+            <i class="fa-solid fa-house mr-2"></i>Home
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'pet_list' %}" class="breadcrumb">
+            <i class="fa-solid fa-paw mr-2 text-lg"></i>Pets
+        </a>
+    </li>
+    <li>
+        <a href="{{ pet.get_absolute_url }}" class="breadcrumb">
+            <i class="fa-solid fa-cat mr-2"></i>{{ pet.name }}
+        </a>
+    </li>
+    <li><i class="fa-solid fa-plus mr-2"></i>Update Pet Info</li>
+{% endblock %}
+
+{% block content %}
+    <div class="form-container">
+        <div class="new-form-main">
+            <h2 class="new-from-title">Update Pet Info</h2>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                    <div class="flex flex-col space-y-2">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-error">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-error">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="mb-4">
+                        <label class="label" for="{{ field.label }}">{{ field.label }}</label>
+            
+                        {% if field.name == 'medication_required' %}
+                            {% render_field field class="checkbox create-input" %}
+                        {% elif field.name in 'profile_image' %}
+                            {% render_field field class="create-input mt-2" %}
+                        {% else %}
+                            {% render_field field class="form-input" %}
+                        {% endif %}
+            
+                        {% if field.errors %}
+                            <div class="text-error">
+                                <strong>{{ field.errors.0 }}</strong>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="pt-4">
+                    <button type="submit" class="btn btn-primary">Save Pet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,42 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Sitter Pro | {% block title %}{% endblock title %}</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}" >
+    <link href="{% static 'dist/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css"> 
+</head>
+<body data-theme="myDarkTheme" class="bg-base-100 min-h-screen">
+
+    <div class="py-2">
+        {% include '_navbar.html'%}
+    </div>
+
+    {% block breadcrumbs %}
+        <div class="breadcrumbs text-sm pt-14 ml-12 md:pt-20 text-base-content">
+            <ul>
+                {% block extra_breadcrumbs %}{% endblock %}
+            </ul>
+        </div>
+    {% endblock %}
+    {% if messages %}
+        <div class="fixed top-20 right-0 flex flex-col space-y-2 mt-4 mr-6 w-3/4 md:w-1/5 z-20 opacity-85">
+            {% for message in messages %}
+                <div role="alert" class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    <strong>{{ message|escape }}</strong>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="pt-3">
+        {% block content %}
+        {% endblock content %}
+    </div>
+    <script src="{% static 'js/base.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}Create new booking{% endblock title %}
+
+{% block extra_breadcrumbs %}
+    <li>
+        <a href="{% url 'home' %}" class="breadcrumb">
+            <i class="fa-solid fa-house mr-2"></i>Home
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'booking_list' %}" class="breadcrumb">
+            <i class="fa-solid fa-calendar-days mr-2"></i>Bookings
+        </a>
+    </li>
+    <li><i class="fa-solid fa-plus mr-2"></i>Create new booking</li>
+{% endblock %}
+
+{% block content %}
+    {% if not has_households and not has_pets %}
+        <div class="list-container">
+            <h1>No clients found. <br>Add one <a href="{% url 'pet_create' %}" class="underline text-primary dark:text-base-content">here</a> before creating a booking.</h1>
+        </div>
+    {% else %}
+        <div class="form-container">
+            <div class="new-form-main">
+                <h2 class="new-from-title">New Booking</h2>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        <div class="mb-4">
+                            <label class="label" for="{{ field.label }}">{{ field.label }}</label>
+
+                            {% if field.name == 'rate_per_day' or field.name == 'bonus_rate' %}
+                                {% render_field field class="form-input" type="text" placeholder="Enter Rate" %}
+                            {% elif field.name in 'start_date end_date' %}
+                                {% render_field field class="form-input" type="date" %}
+                            {% elif field.name == 'pets' %}
+                                <!-- Handle the pets field (checkboxes) -->
+                                <div class="form-input">
+                                    {% for choice in field %}
+                                        <label class="inline-flex items-center">
+                                            {{ choice.tag }}  <!-- The checkbox input itself -->
+                                            {{ choice.choice_label }}  <!-- The label for the checkbox -->
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {% render_field field class="form-input" %}
+                            {% endif %}
+                    
+                            {% if field.errors %}
+                                <div class="text-error">
+                                    <strong>{{ field.errors.0 }}</strong>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="pt-4">
+                        <button type="submit" class="btn btn-primary">Create Booking</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}

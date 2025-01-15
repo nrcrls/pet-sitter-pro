@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="text-base-content pb-12">
+            <div class="grid grid-flow-row md:grid-cols-3">
+                <div class="pt-2 md:pt-12 mx-10 md:mx-32 col-span-2">
+                    <h3 class="title text-4xl mb-4">Dashboard</h3>
+                    <div class="grid grid-cols-3 mr-6 justify-items-center text-center md:text-xl pb-12 rounded-box">
+                        <div>
+                            <a href="{% url 'pet_new_base' %}">
+                                <img src="{% static 'images/add_pets.svg' %}" alt="Add Pet Image" class="mt-10 mb-1 w-20 md:w-28" />
+                                <p>Add Pets</p>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="{% url 'pet_list' %}">
+                                <img src="{% static 'images/pets.svg' %}" alt="My Pets Image" class="mt-12 mb-3 w-16 md:w-24" />
+                                <p>My Pets</p>
+                            </a>
+                        </div>
+                        <!-- <div>
+                            <a href="">
+                                <img src="{% static 'images/income.svg' %}" alt="Income Data Image" class="mx-auto mt-12 mb-2 w-16 md:w-24" />
+                                <p>Income Data</p>
+                            </a>
+                        </div> -->
+                        <div>
+                            <a href="{% url 'booking_new' %}">
+                                <img src="{% static 'images/add_booking.svg' %}" alt="Add Booking Image" class="mt-10 ml-4 md:ml-0 w-16 md:w-24" />
+                                <p class="text-md mt-2">Add Booking</p>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="{% url 'booking_list' %}">
+                                <img src="{% static 'images/bookings.svg' %}" alt="Bookings Image" class="mt-10 mb-2 w-16 md:w-24" />
+                                <p class="mt-1">Bookings</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-12 mx-10 w-3/4">
+                    <h3 class="pb-4 title text-4xl">Upcoming Bookings</h3>
+                    {% if bookings %}
+                        <div class="overflow-x-auto mt-8">
+                            <div class="md:hidden carousel rounded-box">
+                                {% for booking in bookings|slice:"0:3" %}
+                                    <div class="carousel-item">
+                                        <div class="list-card ml-4">
+                                            <div class="list-card-body mt-4">
+                                                <h1 class="card-title">{{ booking }}</h1>
+                                                <div>
+                                                    <p class="mt-2">
+                                                        <span class="text-base-300">Dates:</span><br>
+                                                        {{ booking.dates }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>    
+
+                            <div class="hidden md:inline-block carousel carousel-vertical rounded-box">
+                                {% for booking in bookings|slice:"0:3" %}
+                                    <a href="{% url 'booking_list' %}">
+                                        <div class="carousel-item">
+                                            <div class="list-card ml-4">
+                                                <div class="list-card-body mt-4">
+                                                    <h1 class="card-title">{{ booking }}</h1>
+                                                    <div>
+                                                        <p class="mt-2">
+                                                            <span class="text-base-300">Dates:</span><br>
+                                                            {{ booking.dates }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="text-center pt-4 text-lg"><a href="{% url 'booking_list' %}"  class="hover:text-primary">See more...</a></div>
+                    {% else %}
+                        <div class="text-lg">No bookings found. Schedule one <a href="{% url 'booking_new' %}" class="underline text-primary dark:text-base-content">here</a>.</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="flex flex-col md:flex-row md:mt-12 gap-12 justify-center items-center text-center">
+            <div> 
+                <div>
+                    <h1 class="text-base-content text-6xl lg:text-7xl leading-snug mb-2">
+                        Welcome to <br /><span class="text-primary">Pet Sitter Pro</span>
+                    </h1>
+                </div>
+
+                <div class="md:mt-10">
+                    <img src="{% static 'images/blob.svg' %}" alt="Blob Image" class="sm:w-96 sm:h-96 w-80 h-80 mb-2 md:hidden" />
+                    <h3 class="text-base-content my-2 text-3xl">The pet sitter's diary</h3>
+                    <ul class="flex flex-col items-center">
+                        <li>
+                            <button class="btn btn-primary my-4">
+                                <a href="{% url 'account_signup' %}">Create an account</a>
+                            </button>
+                        </li>
+                        <li class="text-base-content">
+                            Already registered? <a href="{% url 'account_login' %}" class="text-primary font-semibold hover:underline">Log in here</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            <img src="{% static 'images/blob.svg' %}" alt="Blob Image" class="sm:w-96 sm:h-96 w-80 h-80 mb-2 hidden md:inline-block" />
+            
+        </div> 
+    {% endif %}
+{% endblock content %}

@@ -1,0 +1,24 @@
+{% if user.is_authenticated %}
+    <li>
+        <p>Hi, <span class="underline">{{ user.username }}!</span></p>
+    </li>
+    <li>
+        <a href="{% url 'pet_list' %}">Pets</a>
+    </li>
+    <li>
+        <a href="{% url 'booking_list' %}">Bookings</a>
+    </li>
+    <li>
+        <form method="post" action="{% url 'account_logout' %}">
+            {% csrf_token %}
+            <button type="submit">Log Out</button>
+        </form>
+    </li>
+{% else %}
+    <li>
+        <a href="{% url 'account_signup' %}">Sign Up</a>
+    </li>
+    <li>
+        <a href="{% url 'account_login' %}">Log In</a>
+    </li>
+{% endif %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block extra_breadcrumbs %}
+    <li>
+        <a href="{% url 'home' %}" class="breadcrumb">
+            <i class="fa-solid fa-house mr-2"></i>Home
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'pet_list' %}" class="breadcrumb">
+            <i class="fa-solid fa-paw mr-2 text-lg"></i>Pets
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'pet_new_base' %}" class="breadcrumb">
+            <i class="fa-solid fa-plus mr-2"></i>Add Pets
+        </a>
+    </li>
+    <li><i class="fa-solid fa-plus mr-2"></i>Existing Households</li>
+
+{% endblock %}
+
+{% block content %}
+    <div class="form-container">
+        <div class="new-form-main">
+            <h2 class="new-from-title">Add Pet | Existing Households</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="mb-4">
+                        {% if field.name == 'medication_required' %}
+                            <div class="flex items-center space-x-2">
+                                <label class="label" for="{{ field.label }}">{{ field.label }}</label>
+                                {% render_field field class="checkbox create-input" %}
+                            </div>
+                        {% elif field.name == 'profile_image' %}
+                            <label class="label" for="{{ field.label }}">{{ field.label }}</label>
+                            {% render_field field class="create-input mt-2" %}
+                        {% else %}
+                            <label class="label" for="{{ field.label }}">{{ field.label }}</label>
+                            {% render_field field class="form-input" %}
+                        {% endif %}
+                
+                        {% if field.errors %}
+                            <div class="text-error">
+                                <strong>{{ field.errors.0 }}</strong>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

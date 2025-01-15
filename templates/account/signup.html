@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Sign Up{% endblock title %}
+
+{% block content %}
+    <div class="form-container">
+        <div class="form-main">
+            <h2 class="form-title">Sign Up</h2>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% for field in form.visible_fields %}
+                <div>
+                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% render_field field class="form-input mb-4" placeholder=field.label %}
+                    {% if field.errors %}
+                        <div class="text-error">
+                            <strong>{{ field.errors }}</strong>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+                <div>
+                    <button type="submit" class="btn btn-primary">Create Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

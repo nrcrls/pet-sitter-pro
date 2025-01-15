@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+{% load booking_filters %}
+{% load widget_tweaks %}
+
+{% block title %}Bookings{% endblock title %}
+
+{% block extra_breadcrumbs %}
+    <li>
+        <a href="{% url 'home' %}" class="breadcrumb">
+            <i class="fa-solid fa-house mr-2"></i>Home
+        </a>
+    </li>
+    <li><i class="fa-solid fa-calendar-days mr-2"></i>My Bookings</li>
+{% endblock %}
+
+{% block content %}
+    <div class="list-container md:container">
+        <div class="col-span-1">
+            <h1 class="list-title mb-4 sm:mb-0">My Bookings</h1>
+        
+            <!-- Filter for desktop view (visible on md screens and above) -->
+            <div class="hidden md:inline-block">
+                {% include '_filter.html' %}
+            </div>
+        </div>
+
+        <!-- Second column -->
+        <div class="col-span-1 md:col-span-3 md:mt-24">
+            <div class="md:hidden flex gap-4 mb-4">
+                {% include '_filter.html' with modal_id='filter_modal_1' %}
+            </div>
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <p class="font-semibold text-sm md:text-lg mb-4 md:mb-0">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ booking_count }} booking{{ booking_count|pluralize }}</p>
+                {% include '_pagination.html' %}
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {% if bookings %}
+                    {% for booking in bookings %}
+                        <a href="{{ booking.get_absolute_url }}">
+                            <div class="list-card mr-36">
+                                <div class="relative list-card-body">
+                                    <h1 class="card-title mt-8">{{ booking }}</h1>
+                                    <div>
+                                        <p><span class="text-neutral-content">Owner:</span>
+                                            <br>
+                                            <p>{{ booking.get_owner_names }}</p>
+                                        </p>
+                                        <p class="mt-2"><span class="text-neutral-content">Dates:</span>
+                                            <br>
+                                            <p>{{ booking.dates }}</p>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="absolute top-0 right-0 m-4">
+                                    <p class="badge badge-{{ booking|status_based_on_date|status_to_class }}">
+                                        {{ booking|status_based_on_date }}
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    {% if not has_households and not has_pets %}
+                        <h1>No clients found. <br>Add one <a href="{% url 'pet_create' %}" class="underline text-primary dark:text-base-content">here</a> before creating a booking.</h1>
+                    {% else %}
+                        <h1>No bookings found. Schedule one <a href="{% url 'booking_new' %}" class="underline text-primary dark:text-base-content">here</a>.</h1>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="new-btn">
+            <a href="{% url 'booking_new' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-16 md:size-24">
+                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        </div>
+    </div>
+{% endblock content %}
