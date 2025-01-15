@@ -36,13 +36,13 @@ Follow these steps to set up the project locally.
 
    ```bash
    git clone https://github.com/nrcrls/pet-sitter-pro.git
-   cd pet-sitter-pro```
+   cd pet-sitter-pro
 
 2. **Build and run the Docker containers:
-    ```docker-compose up --build -d```
+    ```docker-compose up --build -d
 
 3. **Apply database migrations:
-    ```docker-compose exec web python manage.py migrate```
+    ```docker-compose exec web python manage.py migrate
 
 4. **Create a superuser (optional):
-    ```docker-compose exec web python manage.py createsuperuser```
+    ```docker-compose exec web python manage.py createsuperuser
