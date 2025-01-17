@@ -9,7 +9,7 @@ services:
     depends_on:
       - db
     environment:
-      - "DJANGO_SECRET_KEY=django-insecure-4ng@7s2c86ct$$ca6r)9upu4etit-v6ae!71me0*ze%$$fk6)x+l"
+      - "SECRET_KEY=django-insecure-4ng@7s2c86ct$$ca6r)9upu4etit-v6ae!71me0*ze%$$fk6)x+l"
       - "DJANGO_DEBUG=True"
       - "DJANGO_SECURE_SSL_REDIRECT=False"
       - "DJANGO_SECURE_HSTS_SECONDS=0"
