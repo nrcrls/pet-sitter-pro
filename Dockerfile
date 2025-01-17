@@ -1,23 +1,29 @@
-# Pull base image
-FROM python:3.11.5-slim-bullseye
+ARG PYTHON_VERSION=3.12-slim
 
-# Set environment variables
-ENV PIP_DISABLE_PIP_VERSION_CHECK 1
+FROM python:${PYTHON_VERSION}
+
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Set work directory
+# install psycopg2 dependencies.
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /code
+
 WORKDIR /code
 
-# Install dependencies
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+COPY requirements.txt /tmp/requirements.txt
+RUN set -ex && \
+    pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt && \
+    rm -rf /root/.cache/
+COPY . /code
 
-# Copy project
-COPY . .
-
-# Collect static files
 RUN python manage.py collectstatic --noinput
 
-# Command to run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "pet_sitter_pro.wsgi:application"]
+EXPOSE 8000
+
+CMD ["gunicorn","--bind",":8000","--workers","2","pet_sitter_pro.wsgi"]
