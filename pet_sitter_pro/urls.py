@@ -7,13 +7,13 @@ urlpatterns = [
     path("admin_kanri/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("", include("pets.urls")),
-]+ static(
-    settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
-)
+]
 
 if settings.DEBUG:
     import debug_toolbar
 
-    urlpatterns = [
+    urlpatterns += [
         path("__debug__/", include(debug_toolbar.urls)),
-    ] + urlpatterns
+    ]
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
