@@ -5,6 +5,7 @@ from django.core.management.utils import get_random_secret_key
 
 env = Env()
 env.read_env()
+ENVIRONMENT = env('ENVIRONMENT')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -145,7 +146,7 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 
-if DEBUG:
+if ENVIRONMENT == 'development':
     # Development settings
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
